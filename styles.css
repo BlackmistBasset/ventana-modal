@@ -10,7 +10,7 @@ body {
 }
 header {
   height: 80px;
-  background-color: burlywood;
+  background-color: rgb(222, 135, 202);
   display: flex;
   align-items: center;
   justify-content: flex-end;
