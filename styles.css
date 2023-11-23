@@ -1,0 +1,218 @@
+* {
+  margin: 0;
+  padding: 0;
+  box-sizing: border-box;
+  font-family: Arial, Helvetica, sans-serif;
+}
+
+body {
+  height: 100vh;
+}
+header {
+  height: 80px;
+  background-color: burlywood;
+  display: flex;
+  align-items: center;
+  justify-content: flex-end;
+  position: sticky;
+  top: 0;
+}
+
+/* TIPOS DE POSITION */
+
+.relative {
+  position: relative; /*relative es el valor más "light" porque por sí solo ni cambia la posición de un elemento ni lo saca del flujo de la página. Le podemos poner un z-index, le podemos cambiar la posición usando las coordenadas, pero el espacio que ocupaba el elemento se sigue viendo y respetando -aunque si lo movemos mucho quede desocupado, pero va a seguir ahí y ningún elemento ocupará su lugar- */
+  top: 0;
+}
+
+.absolute {
+  position: absolute; /* Absolute saca al elemento del flujo de la página y es como si todo el contenido restante no existiese. Si le ponemos top y left 0 aparecerá encima de todo a la izquierda, por encima de los demás elementos y sin respetar su lugar. Pero a diferencia de fixed, se posiciona en relación al documento y no al viewport por lo que si hacemos scoll se moverá. */
+  top: 0;
+}
+
+.sticky {
+  position: sticky; /*Sticky no quita al elemento del flujo de la página y se comporta como cualquier elemento hasta que al hacer scroll hacia abajo se mantiene a la altura especificada con la propiedad top. Una vez su contenedor termina de ser scrolleado deja de permanecer en la pantalla y desaparece el efecto "sticky" (a diferencia de fixed que no respeta su contenedor y está siempre presente). El mecanismo de acción de sticky es un poco confuso de explicar por lo que recomiendo que vean esta página que lo explica perfectamente, y además marca las diferencias respecto a fixed: https://www.kevinpowell.co/article/positition-fixed-vs-sticky/ */
+  top: 0;
+  z-index: 9000; /* z-index nos permite determinar, cuando elementos se superponen, cuál se verá por encima de cual. Para poder utilizarlo, el elemento tiene que tener cualquier position menos static (relative, absolute, fixed o sticky). Elementos con valores altos estarán más "cerca" o "adelante" que los que tengan z-index más bajo. No hay valores correctos de z-index, puede ser cualquier número del 0 en adelante, sí hay que tener cuidado porque a veces se producen comportamientos extraños (por ejemplo, contenedores que se ven por encima de un menú fijo) porque asignamos mal los valores.  */
+  height: 100px;
+  width: 100%;
+  background-color: blueviolet;
+}
+
+.fixed {
+  position: fixed; /* fixed fija un elemento respecto al viewport (o sea, la parte visible de la pantalla) a las coordenadas establecidas. Permancerá estático y por encima de los demás elementos incluso mientras se escrollean. El elemento con position fixed saldrá del flujo de la página, similar a lo que sucede con position absolute. */
+  top: 0;
+}
+
+/* CASO PRÁCTICO DE MENÚ REALIZADO CON POSITION RELATIVE + ABSOLUTE*/
+.menu {
+  display: flex;
+  gap: 30px;
+  margin-right: 30px;
+}
+
+.menu-desplegable {
+  position: relative;
+  max-height: 20px;
+  overflow: hidden;
+}
+
+/* Oveflow: 
+Es una propiedad que nos permite definir qué pasará con el contenido de un elemento si es mayor al elemento que lo contiene. Las principales variantes son:
+-auto: pondrá un scroll tanto horizontal como vertical solo si existe contenido que exceda a su contenedor.
+-scroll: la barra de scroll estará siempre visible sobre contenido o no.
+-hidden: el contenido excedente se "esconde" y no se ve.
+-visible: le permitirá al contenido excederse de su contenedor, se usa principalmente cuando previamente se había usado el overflox hidden (sino el contenido no se muestra)
+*/
+
+.menu-desplegable:hover {
+  max-height: 300px;
+  overflow: visible;
+}
+
+.menu-desplegable nav {
+  position: absolute; /*Como el elemento padre (menú desplegable) tiene un positino relative, el nav que es el hijo tendrá position absolute -se saldrá del flujo de la página y no molestará ni redimensionará otros elementos- pero su posicionamiento será respecto a su padre y no al documento, recurso deliberadamente útil para hacer este tipo de efectos. Nota: este ejemplo fue creado solo para mostrar este comportamiento sincrónico entre position relative y absolute. Este menú no tiene funcionalidad real porque al sacar el cursor de menú desplegable, el menú se oculta (se termina el hover) y no llegamos a hacer click en sus opciones. */
+  top: 30px;
+  background-color: white;
+  padding: 15px;
+  width: 100px;
+}
+
+.menu-desplegable li {
+  border-bottom: 1px solid black;
+  padding-block: 5px;
+}
+
+main {
+  /* height: calc(100% - 100px); Antes de que mi página tuviese un montón de texto con scroll, usé esta regla para que entren todos mis elementos en la pantalla sin que se me haga scroll y se vea bien en todas las pantallas. Esto funciona porque body tiene un tamaño de 100vh (sino height no respeta unidades en % si elementos superiores no tienen un alto definido porque el alto no se calcula de forma automática como el ancho de los elementos en bloque que siempre es del 100%). Le estoy diciendo a main que ocupe todo el espacio disponible del viewport (parte visible de la pantalla), salvo 80px que tiene de alto el header y 20px que tiene de alto el footer, dando en total 100px.*/
+  display: flex;
+}
+
+aside {
+  width: 300px;
+  background-color: cadetblue;
+}
+
+section {
+  position: static; /* static es el valor de position por defecto de todos los elementos. En static, las propiedades top, left, right, bottom y z-index no tienen efecto. */
+  width: 100%;
+  background-color: cornsilk;
+  /* overflow: auto; */
+}
+
+ul {
+  list-style: none;
+}
+
+/* Estos dos cuadrados los usamos para ver las diferencias en el comportamiento entre position relative y absolute. Se los dejo para que jueguen! */
+
+.rojo,
+.verde {
+  padding: 5px;
+  width: 100px;
+  height: 100px;
+  border-radius: 5px;
+}
+
+.rojo {
+  background-color: red;
+  top: 20px;
+  left: 20px;
+  position: relative;
+}
+
+.verde {
+  background-color: green;
+  position: absolute;
+  bottom: 30px;
+  right: 30px;
+}
+
+footer {
+  height: 20px;
+  background-color: cornflowerblue;
+  text-align: center;
+}
+
+/*Este conjunto de clases lo podemos usar para los casos en que un elemento no puede adaptarse de mobile a escritorio solo con estilos y media queries y necesitamos una versión del html para mobile y una para escritorio. Si a la versión para verse en mobile le ponemos la clase mobile y a la de escritorio la clase desktop, se hará el toggle entre ambas de forma que cuando se ve una versión se oculte la otra y viceversa. */
+
+.mobile {
+  display: block;
+  color: red;
+}
+
+@media (min-width: 970px) {
+  .mobile {
+    display: none;
+  }
+}
+
+.desktop {
+  display: none;
+  color: green;
+}
+
+@media (min-width: 970px) {
+  .desktop {
+    display: block;
+  }
+}
+
+/* Diferencias entre display none y visibility hidden: Si bien ambas propiedades ocultan elementos, display none los quita también del flujo de la página, mientras que visibility solo los vuelve "invisibles". Pero el espacio que ocupaban sigue estando ahí. */
+
+/* M O D A L */
+
+body.open__modal {
+  overflow: hidden;
+}
+
+.open__modal .modal__cover {
+  display: block;
+}
+
+.modal__container {
+  display: none;
+}
+
+.open__modal .modal__container {
+  display: block;
+}
+
+.modal__cover {
+  display: none;
+  width: 103vw;
+  height: 103vh;
+  position: fixed;
+  top: 0;
+  z-index: 500;
+  background-color: rgba(0, 0, 0, 0.5);
+  backdrop-filter: blur(4px);
+}
+
+.modal__container {
+  position: fixed;
+  z-index: 501;
+  width: 400px;
+  height: 270px;
+  left: 50%;
+  transform: translate(-50%, 50%);
+  background-color: white;
+  padding: 20px;
+  border-radius: 10px;
+}
+
+.modal__title,
+.modal__legend {
+  text-align: center;
+  margin-bottom: 20px;
+}
+
+.modal__btn {
+  display: block;
+  width: 100px;
+  padding: 5px 10px;
+  color: white;
+  background-color: blue;
+  border: none;
+  margin: 50px auto 0px;
+}
